@@ -6,6 +6,9 @@ namespace SapB1\Toolkit\Filament\Resources\TenantResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use SapB1\Toolkit\Filament\Resources\TenantResource;
 
 class ListTenants extends ListRecords
@@ -31,11 +34,9 @@ class ListTenants extends ListRecords
 
     /**
      * Get records from configuration.
-     *
-     * @return array<int, array<string, mixed>>
      */
-    protected function getTableRecords(): array
+    public function getTableRecords(): Collection|Paginator|CursorPaginator
     {
-        return TenantResource::getTenantData();
+        return collect(TenantResource::getTenantData());
     }
 }

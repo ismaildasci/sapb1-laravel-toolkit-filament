@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Support;
 
 use Exception;
-use SapB1\Facades\SapB1;
+use SapB1\Health\SapB1HealthCheck;
 
 class HealthChecker
 {
@@ -33,13 +33,13 @@ class HealthChecker
     public function checkSapConnection(): array
     {
         try {
-            $health = SapB1::connection()->health();
-            $result = $health->check();
+            $healthCheck = app(SapB1HealthCheck::class);
+            $result = $healthCheck->check();
 
             return [
-                'status' => $result['healthy'] ?? false ? 'healthy' : 'unhealthy',
-                'message' => $result['message'] ?? 'Connection check completed',
-                'latency' => $result['latency'] ?? null,
+                'status' => $result->healthy ? 'healthy' : 'unhealthy',
+                'message' => $result->message,
+                'latency' => $result->responseTime !== null ? (int) round($result->responseTime) : null,
                 'last_check' => now()->toIso8601String(),
             ];
         } catch (Exception $e) {

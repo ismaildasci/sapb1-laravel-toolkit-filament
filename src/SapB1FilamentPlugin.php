@@ -41,7 +41,7 @@ final class SapB1FilamentPlugin implements Plugin
 
     public static function make(): static
     {
-        return app(static::class);
+        return app(self::class);
     }
 
     public static function get(): static

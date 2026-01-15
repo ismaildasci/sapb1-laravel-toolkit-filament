@@ -221,7 +221,7 @@ class TenantResource extends Resource
 
         try {
             $multiTenant = app(MultiTenantService::class);
-            $currentTenant = $multiTenant->getCurrentTenant();
+            $currentTenant = $multiTenant->getTenantId();
         } catch (Exception $e) {
             // Service not available
         }
