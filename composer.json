@@ -1,0 +1,67 @@
+{
+    "name": "ismaildasci/laravel-sapb1-toolkit-filament",
+    "description": "Filament Admin Panel for SAP Business One Laravel Toolkit",
+    "keywords": [
+        "laravel",
+        "filament",
+        "sap",
+        "sap-b1",
+        "sap-business-one",
+        "admin-panel",
+        "toolkit"
+    ],
+    "homepage": "https://github.com/ismaildasci/laravel-sapb1-toolkit-filament",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "İsmail Daşçı",
+            "email": "dasci.info@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "filament/filament": "^4.5",
+        "ismaildasci/laravel-sapb1-toolkit": "^3.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "nunomaduro/collision": "^8.0",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SapB1\\Toolkit\\Filament\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SapB1\\Toolkit\\Filament\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SapB1\\Toolkit\\Filament\\SapB1FilamentServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
