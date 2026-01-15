@@ -1,0 +1,25 @@
+/vendor/
+/node_modules/
+/.phpunit.cache/
+/build/
+/coverage/
+
+composer.lock
+
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+*.swp
+*.swo
+
+.env
+.env.local
+.env.*.local
+
+*.log
+
+# Claude memory files
+CLAUDE.md
+**/CLAUDE.md

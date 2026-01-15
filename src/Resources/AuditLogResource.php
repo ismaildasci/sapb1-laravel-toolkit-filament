@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SapB1\Toolkit\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Filament\Resources\AuditLogResource\Pages;
@@ -17,7 +20,7 @@ class AuditLogResource extends Resource
 {
     protected static ?string $model = AuditLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?int $navigationSort = 10;
 
@@ -43,42 +46,42 @@ class AuditLogResource extends Resource
         return __('sapb1-filament::resources.audit_log.plural_model_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make(__('sapb1-filament::resources.audit_log.sections.details'))
+                Section::make(__('sapb1-filament::resources.audit_log.sections.details'))
                     ->schema([
-                        Forms\Components\TextInput::make('entity_type')
+                        TextInput::make('entity_type')
                             ->label(__('sapb1-filament::resources.audit_log.fields.entity_type'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('entity_id')
+                        TextInput::make('entity_id')
                             ->label(__('sapb1-filament::resources.audit_log.fields.entity_id'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('event')
+                        TextInput::make('event')
                             ->label(__('sapb1-filament::resources.audit_log.fields.event'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('user_id')
+                        TextInput::make('user_id')
                             ->label(__('sapb1-filament::resources.audit_log.fields.user_id'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('tenant_id')
+                        TextInput::make('tenant_id')
                             ->label(__('sapb1-filament::resources.audit_log.fields.tenant_id'))
                             ->disabled()
                             ->visible(fn () => SapB1FilamentPlugin::get()->isMultiTenantEnabled()),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make(__('sapb1-filament::resources.audit_log.sections.context'))
+                Section::make(__('sapb1-filament::resources.audit_log.sections.context'))
                     ->schema([
-                        Forms\Components\TextInput::make('ip_address')
+                        TextInput::make('ip_address')
                             ->label(__('sapb1-filament::resources.audit_log.fields.ip_address'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('user_agent')
+                        TextInput::make('user_agent')
                             ->label(__('sapb1-filament::resources.audit_log.fields.user_agent'))
                             ->disabled()
                             ->columnSpanFull(),
@@ -86,13 +89,13 @@ class AuditLogResource extends Resource
                     ->columns(2)
                     ->collapsible(),
 
-                Forms\Components\Section::make(__('sapb1-filament::resources.audit_log.sections.changes'))
+                Section::make(__('sapb1-filament::resources.audit_log.sections.changes'))
                     ->schema([
-                        Forms\Components\KeyValue::make('old_values')
+                        KeyValue::make('old_values')
                             ->label(__('sapb1-filament::resources.audit_log.fields.old_values'))
                             ->disabled(),
 
-                        Forms\Components\KeyValue::make('new_values')
+                        KeyValue::make('new_values')
                             ->label(__('sapb1-filament::resources.audit_log.fields.new_values'))
                             ->disabled(),
                     ])
@@ -175,9 +178,9 @@ class AuditLogResource extends Resource
 
                 Tables\Filters\Filter::make('created_at')
                     ->form([
-                        Forms\Components\DatePicker::make('from')
+                        DatePicker::make('from')
                             ->label(__('sapb1-filament::resources.audit_log.filters.from')),
-                        Forms\Components\DatePicker::make('until')
+                        DatePicker::make('until')
                             ->label(__('sapb1-filament::resources.audit_log.filters.until')),
                     ])
                     ->query(function ($query, array $data) {

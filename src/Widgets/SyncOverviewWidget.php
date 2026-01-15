@@ -7,7 +7,6 @@ namespace SapB1\Toolkit\Filament\Widgets;
 use Exception;
 use Filament\Notifications\Notification;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -19,53 +18,67 @@ class SyncOverviewWidget extends BaseWidget
 {
     protected static ?string $heading = null;
 
+    /**
+     * @var array<string, int|null>|int|string
+     */
     protected int|string|array $columnSpan = [
-        'default' => 'full',
+        'default' => 1,
         'md' => 1,
     ];
 
-    protected static ?string $pollingInterval = '10s';
+    protected ?string $pollingInterval = '10s';
 
     public function getHeading(): ?string
     {
         return __('sapb1-filament::widgets.sync.heading');
     }
 
+    /**
+     * @return Builder<SyncMetadata>
+     */
     protected function getTableQuery(): Builder
     {
         return SyncMetadata::query()->orderBy('entity');
     }
 
-    protected function getTableColumns(): array
+    public function table(Table $table): Table
     {
-        return [
-            TextColumn::make('entity')
-                ->label(__('sapb1-filament::widgets.sync.entity'))
-                ->searchable()
-                ->sortable(),
+        return $table
+            ->query($this->getTableQuery())
+            ->columns([
+                TextColumn::make('entity')
+                    ->label(__('sapb1-filament::widgets.sync.entity'))
+                    ->searchable()
+                    ->sortable(),
 
-            BadgeColumn::make('status')
-                ->label(__('sapb1-filament::widgets.sync.status'))
-                ->colors([
-                    'success' => 'completed',
-                    'warning' => 'running',
-                    'danger' => 'failed',
-                    'gray' => 'pending',
-                ]),
+                TextColumn::make('status')
+                    ->label(__('sapb1-filament::widgets.sync.status'))
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'completed' => 'success',
+                        'running' => 'warning',
+                        'failed' => 'danger',
+                        default => 'gray',
+                    }),
 
-            TextColumn::make('last_synced_at')
-                ->label(__('sapb1-filament::widgets.sync.last_sync'))
-                ->since()
-                ->sortable()
-                ->placeholder(__('sapb1-filament::widgets.sync.never')),
+                TextColumn::make('last_synced_at')
+                    ->label(__('sapb1-filament::widgets.sync.last_sync'))
+                    ->since()
+                    ->sortable()
+                    ->placeholder(__('sapb1-filament::widgets.sync.never')),
 
-            TextColumn::make('synced_count')
-                ->label(__('sapb1-filament::widgets.sync.records'))
-                ->numeric()
-                ->sortable(),
-        ];
+                TextColumn::make('synced_count')
+                    ->label(__('sapb1-filament::widgets.sync.records'))
+                    ->numeric()
+                    ->sortable(),
+            ])
+            ->actions($this->getTableActions())
+            ->paginated(false);
     }
 
+    /**
+     * @return array<Tables\Actions\Action>
+     */
     protected function getTableActions(): array
     {
         if (! config('sapb1-filament.sync.allow_manual_sync', true)) {
@@ -143,10 +156,5 @@ class SyncOverviewWidget extends BaseWidget
                 ->danger()
                 ->send();
         }
-    }
-
-    protected function isTablePaginationEnabled(): bool
-    {
-        return false;
     }
 }

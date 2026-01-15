@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Resources;
 
 use Exception;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Filament\Resources\SyncMetadataResource\Pages;
@@ -20,7 +23,7 @@ class SyncMetadataResource extends Resource
 {
     protected static ?string $model = SyncMetadata::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-arrow-path';
 
     protected static ?int $navigationSort = 20;
 
@@ -46,41 +49,41 @@ class SyncMetadataResource extends Resource
         return __('sapb1-filament::resources.sync_metadata.plural_model_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make(__('sapb1-filament::resources.sync_metadata.sections.info'))
+                Section::make(__('sapb1-filament::resources.sync_metadata.sections.info'))
                     ->schema([
-                        Forms\Components\TextInput::make('entity')
+                        TextInput::make('entity')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.entity'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('table_name')
+                        TextInput::make('table_name')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.table_name'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('status')
+                        TextInput::make('status')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.status'))
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('synced_count')
+                        TextInput::make('synced_count')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.synced_count'))
                             ->disabled(),
 
-                        Forms\Components\DateTimePicker::make('last_synced_at')
+                        DateTimePicker::make('last_synced_at')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.last_synced_at'))
                             ->disabled(),
 
-                        Forms\Components\DateTimePicker::make('last_full_sync_at')
+                        DateTimePicker::make('last_full_sync_at')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.last_full_sync_at'))
                             ->disabled(),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make(__('sapb1-filament::resources.sync_metadata.sections.errors'))
+                Section::make(__('sapb1-filament::resources.sync_metadata.sections.errors'))
                     ->schema([
-                        Forms\Components\Textarea::make('last_error')
+                        Textarea::make('last_error')
                             ->label(__('sapb1-filament::resources.sync_metadata.fields.last_error'))
                             ->disabled()
                             ->rows(3)

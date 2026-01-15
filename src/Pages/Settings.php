@@ -9,11 +9,11 @@ use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 
 class Settings extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static ?int $navigationSort = 99;
 
-    protected static string $view = 'sapb1-filament::pages.settings';
+    protected string $view = 'sapb1-filament::pages.settings';
 
     public static function getNavigationLabel(): string
     {

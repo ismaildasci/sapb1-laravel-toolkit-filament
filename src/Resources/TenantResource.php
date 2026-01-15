@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Resources;
 
 use Exception;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use SapB1\Toolkit\Filament\Resources\TenantResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\MultiTenant\MultiTenantService;
@@ -26,7 +26,7 @@ class TenantResource extends Resource
 {
     protected static ?string $model = null;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-building-office-2';
 
     protected static ?int $navigationSort = 30;
 
@@ -55,39 +55,39 @@ class TenantResource extends Resource
         return SapB1FilamentPlugin::get()->isMultiTenantEnabled();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make(__('sapb1-filament::resources.tenant.sections.info'))
+                Section::make(__('sapb1-filament::resources.tenant.sections.info'))
                     ->schema([
-                        Forms\Components\TextInput::make('id')
+                        TextInput::make('id')
                             ->label(__('sapb1-filament::resources.tenant.fields.id'))
                             ->required()
                             ->disabled(fn ($record) => $record !== null),
 
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label(__('sapb1-filament::resources.tenant.fields.name'))
                             ->required(),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make(__('sapb1-filament::resources.tenant.sections.connection'))
+                Section::make(__('sapb1-filament::resources.tenant.sections.connection'))
                     ->schema([
-                        Forms\Components\TextInput::make('sap_url')
+                        TextInput::make('sap_url')
                             ->label(__('sapb1-filament::resources.tenant.fields.sap_url'))
                             ->url()
                             ->required(),
 
-                        Forms\Components\TextInput::make('sap_database')
+                        TextInput::make('sap_database')
                             ->label(__('sapb1-filament::resources.tenant.fields.sap_database'))
                             ->required(),
 
-                        Forms\Components\TextInput::make('sap_username')
+                        TextInput::make('sap_username')
                             ->label(__('sapb1-filament::resources.tenant.fields.sap_username'))
                             ->required(),
 
-                        Forms\Components\TextInput::make('sap_password')
+                        TextInput::make('sap_password')
                             ->label(__('sapb1-filament::resources.tenant.fields.sap_password'))
                             ->password()
                             ->revealable()

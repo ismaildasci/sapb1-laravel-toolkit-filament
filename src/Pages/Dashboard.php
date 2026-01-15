@@ -14,11 +14,11 @@ use SapB1\Toolkit\Filament\Widgets\SystemHealthWidget;
 
 class Dashboard extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar-square';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar-square';
 
     protected static ?int $navigationSort = 1;
 
-    protected static string $view = 'sapb1-filament::pages.dashboard';
+    protected string $view = 'sapb1-filament::pages.dashboard';
 
     public static function getNavigationLabel(): string
     {
@@ -82,17 +82,17 @@ class Dashboard extends Page
     }
 
     /**
-     * @return int | string | array<string, int | string | null>
+     * @return int | array<string, int | null>
      */
-    public function getHeaderWidgetsColumns(): int|string|array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 1;
     }
 
     /**
-     * @return int | string | array<string, int | string | null>
+     * @return int | array<string, int | null>
      */
-    public function getFooterWidgetsColumns(): int|string|array
+    public function getFooterWidgetsColumns(): int|array
     {
         return [
             'default' => 1,

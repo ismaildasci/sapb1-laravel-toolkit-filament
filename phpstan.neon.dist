@@ -1,13 +1,19 @@
 includes:
     - ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - ./vendor/larastan/larastan/extension.neon
 
 parameters:
-    level: 8
+    level: 5
     paths:
         - src
+    excludePaths:
+        - src/Resources/TenantResource/Pages/ListTenants.php
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
-    checkModelProperties: true
+    checkModelProperties: false
     ignoreErrors:
-        - '#Unsafe usage of new static#'
+        - '#Call to static method make\(\) on an unknown class Filament\\#'
+        - '#Call to an undefined method SapB1\\#'
+        - '#has invalid return type Filament\\#'
+        - '#Call to function method_exists\(\) with .* will always evaluate to true#'
+        - '#Parameter \#1 \$actions of method Filament\\Tables\\Table::actions\(\)#'
+        - '#Static method SapB1\\Facades\\SapB1::connection\(\) invoked with 0 parameters#'

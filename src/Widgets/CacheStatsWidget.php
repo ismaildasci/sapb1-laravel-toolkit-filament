@@ -11,10 +11,13 @@ use SapB1\Toolkit\Cache\CacheManager;
 
 class CacheStatsWidget extends StatsOverviewWidget
 {
-    protected static ?string $pollingInterval = null;
+    protected ?string $pollingInterval = null;
 
+    /**
+     * @var array<string, int|null>|int|string
+     */
     protected int|string|array $columnSpan = [
-        'default' => 'full',
+        'default' => 1,
         'md' => 1,
     ];
 
@@ -63,6 +66,9 @@ class CacheStatsWidget extends StatsOverviewWidget
         ];
     }
 
+    /**
+     * @return array<\Filament\Actions\Action>
+     */
     protected function getHeaderActions(): array
     {
         return [
@@ -100,19 +106,19 @@ class CacheStatsWidget extends StatsOverviewWidget
     protected function formatTtl(int $seconds): string
     {
         if ($seconds >= 86400) {
-            $days = floor($seconds / 86400);
+            $days = (int) floor($seconds / 86400);
 
             return sprintf('%d %s', $days, $days === 1 ? 'day' : 'days');
         }
 
         if ($seconds >= 3600) {
-            $hours = floor($seconds / 3600);
+            $hours = (int) floor($seconds / 3600);
 
             return sprintf('%d %s', $hours, $hours === 1 ? 'hour' : 'hours');
         }
 
         if ($seconds >= 60) {
-            $minutes = floor($seconds / 60);
+            $minutes = (int) floor($seconds / 60);
 
             return sprintf('%d %s', $minutes, $minutes === 1 ? 'minute' : 'minutes');
         }

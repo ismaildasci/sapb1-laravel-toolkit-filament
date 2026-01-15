@@ -12,7 +12,7 @@ use SapB1\Toolkit\ChangeTracking\ChangeTrackingService;
 
 class ChangeTrackingWidget extends StatsOverviewWidget
 {
-    protected static ?string $pollingInterval = '30s';
+    protected ?string $pollingInterval = '30s';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -62,6 +62,9 @@ class ChangeTrackingWidget extends StatsOverviewWidget
         }
     }
 
+    /**
+     * @return array<\Filament\Actions\Action>
+     */
     protected function getHeaderActions(): array
     {
         return [
