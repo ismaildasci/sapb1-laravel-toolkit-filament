@@ -9,6 +9,7 @@ use Filament\Panel;
 use SapB1\Toolkit\Filament\Pages\Dashboard;
 use SapB1\Toolkit\Filament\Pages\Settings;
 use SapB1\Toolkit\Filament\Resources\AuditLogResource;
+use SapB1\Toolkit\Filament\Resources\SyncHistoryResource;
 use SapB1\Toolkit\Filament\Resources\SyncMetadataResource;
 use SapB1\Toolkit\Filament\Resources\TenantResource;
 use SapB1\Toolkit\Filament\Widgets\AuditActivityWidget;
@@ -101,6 +102,7 @@ final class SapB1FilamentPlugin implements Plugin
 
         if ($this->syncEnabled) {
             $resources[] = SyncMetadataResource::class;
+            $resources[] = SyncHistoryResource::class;
         }
 
         if ($this->multiTenantEnabled) {

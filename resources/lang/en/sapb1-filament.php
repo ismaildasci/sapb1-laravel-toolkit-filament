@@ -167,6 +167,25 @@ return [
                 'bulk_sync_complete' => 'Bulk sync completed',
             ],
         ],
+        'sync_history' => [
+            'navigation_label' => 'Sync History',
+            'model_label' => 'Sync History',
+            'plural_model_label' => 'Sync History',
+            'fields' => [
+                'entity' => 'Entity',
+                'sync_type' => 'Sync Type',
+                'status' => 'Status',
+                'records_synced' => 'Records Synced',
+                'duration' => 'Duration',
+                'started_at' => 'Started At',
+                'error' => 'Error',
+            ],
+            'filters' => [
+                'entity' => 'Entity',
+                'status' => 'Status',
+                'sync_type' => 'Sync Type',
+            ],
+        ],
         'tenant' => [
             'navigation_label' => 'Tenants',
             'model_label' => 'Tenant',

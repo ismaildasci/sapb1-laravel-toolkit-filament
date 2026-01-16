@@ -27,7 +27,8 @@ class SapB1FilamentServiceProvider extends PackageServiceProvider
             ->name(static::$name)
             ->hasConfigFile()
             ->hasViews(static::$viewNamespace)
-            ->hasTranslations();
+            ->hasTranslations()
+            ->hasMigration('create_sap_sync_history_table');
     }
 
     public function packageBooted(): void
