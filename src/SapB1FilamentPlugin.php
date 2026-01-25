@@ -9,6 +9,10 @@ use Filament\Panel;
 use SapB1\Toolkit\Filament\Pages\Dashboard;
 use SapB1\Toolkit\Filament\Pages\Settings;
 use SapB1\Toolkit\Filament\Resources\AuditLogResource;
+use SapB1\Toolkit\Filament\Resources\InvoiceResource;
+use SapB1\Toolkit\Filament\Resources\ItemResource;
+use SapB1\Toolkit\Filament\Resources\OrderResource;
+use SapB1\Toolkit\Filament\Resources\PartnerResource;
 use SapB1\Toolkit\Filament\Resources\SyncHistoryResource;
 use SapB1\Toolkit\Filament\Resources\SyncMetadataResource;
 use SapB1\Toolkit\Filament\Resources\TenantResource;
@@ -33,6 +37,16 @@ final class SapB1FilamentPlugin implements Plugin
     private bool $changeTrackingEnabled = true;
 
     private bool $settingsEnabled = true;
+
+    private bool $entitiesEnabled = true;
+
+    private bool $partnerEnabled = true;
+
+    private bool $itemEnabled = true;
+
+    private bool $orderEnabled = true;
+
+    private bool $invoiceEnabled = true;
 
     private string $navigationGroup = 'SAP B1';
 
@@ -107,6 +121,22 @@ final class SapB1FilamentPlugin implements Plugin
 
         if ($this->multiTenantEnabled) {
             $resources[] = TenantResource::class;
+        }
+
+        if ($this->entitiesEnabled && $this->partnerEnabled) {
+            $resources[] = PartnerResource::class;
+        }
+
+        if ($this->entitiesEnabled && $this->itemEnabled) {
+            $resources[] = ItemResource::class;
+        }
+
+        if ($this->entitiesEnabled && $this->orderEnabled) {
+            $resources[] = OrderResource::class;
+        }
+
+        if ($this->entitiesEnabled && $this->invoiceEnabled) {
+            $resources[] = InvoiceResource::class;
         }
 
         return $resources;
@@ -191,6 +221,41 @@ final class SapB1FilamentPlugin implements Plugin
         return $this;
     }
 
+    public function entitiesEnabled(bool $enabled = true): static
+    {
+        $this->entitiesEnabled = $enabled;
+
+        return $this;
+    }
+
+    public function partnerEnabled(bool $enabled = true): static
+    {
+        $this->partnerEnabled = $enabled;
+
+        return $this;
+    }
+
+    public function itemEnabled(bool $enabled = true): static
+    {
+        $this->itemEnabled = $enabled;
+
+        return $this;
+    }
+
+    public function orderEnabled(bool $enabled = true): static
+    {
+        $this->orderEnabled = $enabled;
+
+        return $this;
+    }
+
+    public function invoiceEnabled(bool $enabled = true): static
+    {
+        $this->invoiceEnabled = $enabled;
+
+        return $this;
+    }
+
     public function navigationGroup(string $group): static
     {
         $this->navigationGroup = $group;
@@ -247,6 +312,31 @@ final class SapB1FilamentPlugin implements Plugin
     public function isSettingsEnabled(): bool
     {
         return $this->settingsEnabled;
+    }
+
+    public function isEntitiesEnabled(): bool
+    {
+        return $this->entitiesEnabled;
+    }
+
+    public function isPartnerEnabled(): bool
+    {
+        return $this->entitiesEnabled && $this->partnerEnabled;
+    }
+
+    public function isItemEnabled(): bool
+    {
+        return $this->entitiesEnabled && $this->itemEnabled;
+    }
+
+    public function isOrderEnabled(): bool
+    {
+        return $this->entitiesEnabled && $this->orderEnabled;
+    }
+
+    public function isInvoiceEnabled(): bool
+    {
+        return $this->entitiesEnabled && $this->invoiceEnabled;
     }
 
     public function getNavigationGroup(): string
