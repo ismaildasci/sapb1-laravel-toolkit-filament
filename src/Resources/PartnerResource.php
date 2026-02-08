@@ -8,6 +8,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -164,6 +168,119 @@ class PartnerResource extends Resource
                     ])
                     ->collapsible()
                     ->collapsed(),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Tabs::make('partner_details')
+                    ->tabs([
+                        Tabs\Tab::make(__('sapb1-filament::resources.partner.infolist.details'))
+                            ->schema([
+                                TextEntry::make('CardCode')
+                                    ->label(__('sapb1-filament::resources.partner.fields.card_code'))
+                                    ->weight('bold')
+                                    ->size(TextEntry\TextEntrySize::Large)
+                                    ->copyable(),
+
+                                TextEntry::make('CardName')
+                                    ->label(__('sapb1-filament::resources.partner.fields.card_name')),
+
+                                TextEntry::make('CardType')
+                                    ->label(__('sapb1-filament::resources.partner.fields.card_type'))
+                                    ->badge()
+                                    ->formatStateUsing(fn ($state) => $state instanceof CardType ? $state->label() : $state)
+                                    ->color(fn ($state): string => match (true) {
+                                        $state === CardType::Customer || $state === 'cCustomer' => 'success',
+                                        $state === CardType::Supplier || $state === 'cSupplier' => 'info',
+                                        $state === CardType::Lead || $state === 'cLid' => 'warning',
+                                        default => 'gray',
+                                    }),
+
+                                TextEntry::make('GroupCode')
+                                    ->label(__('sapb1-filament::resources.partner.fields.group_code'))
+                                    ->placeholder('-'),
+
+                                IconEntry::make('Valid')
+                                    ->label(__('sapb1-filament::resources.partner.fields.valid'))
+                                    ->boolean(),
+                            ])
+                            ->columns(3),
+
+                        Tabs\Tab::make(__('sapb1-filament::resources.partner.infolist.contact'))
+                            ->schema([
+                                TextEntry::make('Phone1')
+                                    ->label(__('sapb1-filament::resources.partner.fields.phone1'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('Phone2')
+                                    ->label(__('sapb1-filament::resources.partner.fields.phone2'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('Cellular')
+                                    ->label(__('sapb1-filament::resources.partner.fields.cellular'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('Fax')
+                                    ->label(__('sapb1-filament::resources.partner.fields.fax'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('EmailAddress')
+                                    ->label(__('sapb1-filament::resources.partner.fields.email'))
+                                    ->copyable()
+                                    ->placeholder('-'),
+
+                                TextEntry::make('Address')
+                                    ->label(__('sapb1-filament::resources.partner.fields.address'))
+                                    ->placeholder('-')
+                                    ->columnSpanFull(),
+
+                                TextEntry::make('City')
+                                    ->label(__('sapb1-filament::resources.partner.fields.city'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('ZipCode')
+                                    ->label(__('sapb1-filament::resources.partner.fields.zip_code'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('Country')
+                                    ->label(__('sapb1-filament::resources.partner.fields.country'))
+                                    ->placeholder('-'),
+                            ])
+                            ->columns(3),
+
+                        Tabs\Tab::make(__('sapb1-filament::resources.partner.infolist.finance'))
+                            ->schema([
+                                TextEntry::make('Currency')
+                                    ->label(__('sapb1-filament::resources.partner.fields.currency'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('FederalTaxID')
+                                    ->label(__('sapb1-filament::resources.partner.fields.tax_id'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('CurrentAccountBalance')
+                                    ->label(__('sapb1-filament::resources.partner.fields.balance'))
+                                    ->money('TRY')
+                                    ->weight('bold')
+                                    ->size(TextEntry\TextEntrySize::Large)
+                                    ->color(fn ($state) => $state > 0 ? 'danger' : 'success'),
+
+                                TextEntry::make('OpenOrdersBalance')
+                                    ->label(__('sapb1-filament::resources.partner.infolist.open_orders_balance'))
+                                    ->money('TRY')
+                                    ->placeholder('0.00'),
+
+                                TextEntry::make('OpenDeliveryNotesBalance')
+                                    ->label(__('sapb1-filament::resources.partner.infolist.open_delivery_balance'))
+                                    ->money('TRY')
+                                    ->placeholder('0.00'),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

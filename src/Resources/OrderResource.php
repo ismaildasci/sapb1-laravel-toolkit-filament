@@ -9,6 +9,10 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -171,6 +175,105 @@ class OrderResource extends Resource
                     ])
                     ->collapsible()
                     ->collapsed(),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Tabs::make('order_details')
+                    ->tabs([
+                        Tabs\Tab::make(__('sapb1-filament::resources.order.infolist.details'))
+                            ->schema([
+                                TextEntry::make('DocNum')
+                                    ->label(__('sapb1-filament::resources.order.fields.doc_num'))
+                                    ->weight('bold')
+                                    ->size(TextEntry\TextEntrySize::Large),
+
+                                TextEntry::make('CardCode')
+                                    ->label(__('sapb1-filament::resources.order.fields.card_code')),
+
+                                TextEntry::make('CardName')
+                                    ->label(__('sapb1-filament::resources.order.fields.card_name')),
+
+                                TextEntry::make('NumAtCard')
+                                    ->label(__('sapb1-filament::resources.order.fields.num_at_card'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('DocDate')
+                                    ->label(__('sapb1-filament::resources.order.fields.doc_date'))
+                                    ->date(),
+
+                                TextEntry::make('DocDueDate')
+                                    ->label(__('sapb1-filament::resources.order.fields.doc_due_date'))
+                                    ->date(),
+
+                                TextEntry::make('DocumentStatus')
+                                    ->label(__('sapb1-filament::resources.order.fields.status'))
+                                    ->badge()
+                                    ->formatStateUsing(fn ($state) => $state instanceof DocumentStatus ? $state->label() : $state)
+                                    ->color(fn ($state): string => match (true) {
+                                        $state === DocumentStatus::Open || $state === 'bost_Open' => 'success',
+                                        $state === DocumentStatus::Closed || $state === 'bost_Close' => 'gray',
+                                        $state === DocumentStatus::Cancelled || $state === 'bost_Cancelled' => 'danger',
+                                        default => 'warning',
+                                    }),
+
+                                TextEntry::make('VatSum')
+                                    ->label(__('sapb1-filament::resources.order.fields.vat_sum'))
+                                    ->money('TRY'),
+
+                                TextEntry::make('DocTotal')
+                                    ->label(__('sapb1-filament::resources.order.fields.doc_total'))
+                                    ->money('TRY')
+                                    ->weight('bold')
+                                    ->size(TextEntry\TextEntrySize::Large),
+
+                                TextEntry::make('Comments')
+                                    ->label(__('sapb1-filament::resources.order.fields.comments'))
+                                    ->placeholder('-')
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(3),
+
+                        Tabs\Tab::make(__('sapb1-filament::resources.order.infolist.lines'))
+                            ->schema([
+                                RepeatableEntry::make('DocumentLines')
+                                    ->label('')
+                                    ->schema([
+                                        TextEntry::make('ItemCode')
+                                            ->label(__('sapb1-filament::resources.order.fields.item_code')),
+
+                                        TextEntry::make('ItemDescription')
+                                            ->label(__('sapb1-filament::resources.order.infolist.item_description'))
+                                            ->placeholder('-'),
+
+                                        TextEntry::make('Quantity')
+                                            ->label(__('sapb1-filament::resources.order.fields.quantity'))
+                                            ->numeric(decimalPlaces: 2),
+
+                                        TextEntry::make('Price')
+                                            ->label(__('sapb1-filament::resources.order.fields.price'))
+                                            ->money('TRY'),
+
+                                        TextEntry::make('DiscountPercent')
+                                            ->label(__('sapb1-filament::resources.order.fields.discount_percent'))
+                                            ->suffix('%'),
+
+                                        TextEntry::make('WarehouseCode')
+                                            ->label(__('sapb1-filament::resources.order.fields.warehouse_code'))
+                                            ->placeholder('-'),
+
+                                        TextEntry::make('LineTotal')
+                                            ->label(__('sapb1-filament::resources.order.infolist.line_total'))
+                                            ->money('TRY')
+                                            ->weight('bold'),
+                                    ])
+                                    ->columns(7),
+                            ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

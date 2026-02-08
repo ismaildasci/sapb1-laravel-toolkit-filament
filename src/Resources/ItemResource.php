@@ -7,6 +7,10 @@ namespace SapB1\Toolkit\Filament\Resources;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -146,6 +150,95 @@ class ItemResource extends Resource
                     ->columns(3)
                     ->collapsible()
                     ->visibleOn('view'),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Tabs::make('item_details')
+                    ->tabs([
+                        Tabs\Tab::make(__('sapb1-filament::resources.item.infolist.details'))
+                            ->schema([
+                                TextEntry::make('ItemCode')
+                                    ->label(__('sapb1-filament::resources.item.fields.item_code'))
+                                    ->weight('bold')
+                                    ->size(TextEntry\TextEntrySize::Large)
+                                    ->copyable(),
+
+                                TextEntry::make('ItemName')
+                                    ->label(__('sapb1-filament::resources.item.fields.item_name')),
+
+                                TextEntry::make('ForeignName')
+                                    ->label(__('sapb1-filament::resources.item.fields.foreign_name'))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('BarCode')
+                                    ->label(__('sapb1-filament::resources.item.fields.barcode'))
+                                    ->copyable()
+                                    ->placeholder('-'),
+
+                                TextEntry::make('ItemType')
+                                    ->label(__('sapb1-filament::resources.item.fields.item_type'))
+                                    ->badge()
+                                    ->formatStateUsing(fn ($state) => $state instanceof ItemType ? $state->label() : $state)
+                                    ->color(fn ($state): string => match (true) {
+                                        $state === ItemType::Items || $state === 'itItems' => 'success',
+                                        $state === ItemType::Labor || $state === 'itLabor' => 'info',
+                                        $state === ItemType::Travel || $state === 'itTravel' => 'warning',
+                                        $state === ItemType::FixedAssets || $state === 'itFixedAssets' => 'primary',
+                                        default => 'gray',
+                                    }),
+
+                                IconEntry::make('Valid')
+                                    ->label(__('sapb1-filament::resources.item.fields.valid'))
+                                    ->boolean(),
+
+                                IconEntry::make('SalesItem')
+                                    ->label(__('sapb1-filament::resources.item.fields.sales_item'))
+                                    ->boolean(),
+
+                                IconEntry::make('PurchaseItem')
+                                    ->label(__('sapb1-filament::resources.item.fields.purchase_item'))
+                                    ->boolean(),
+
+                                IconEntry::make('InventoryItem')
+                                    ->label(__('sapb1-filament::resources.item.fields.inventory_item'))
+                                    ->boolean(),
+                            ])
+                            ->columns(3),
+
+                        Tabs\Tab::make(__('sapb1-filament::resources.item.infolist.stock'))
+                            ->schema([
+                                TextEntry::make('QuantityOnStock')
+                                    ->label(__('sapb1-filament::resources.item.fields.quantity_on_stock'))
+                                    ->numeric(decimalPlaces: 2)
+                                    ->size(TextEntry\TextEntrySize::Large)
+                                    ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
+
+                                TextEntry::make('available_quantity')
+                                    ->label(__('sapb1-filament::resources.item.fields.available'))
+                                    ->getStateUsing(fn ($record) => max(0, ($record->QuantityOnStock ?? 0) - ($record->QuantityOrderedByCustomers ?? 0)))
+                                    ->numeric(decimalPlaces: 2)
+                                    ->size(TextEntry\TextEntrySize::Large)
+                                    ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
+
+                                TextEntry::make('QuantityOrderedByCustomers')
+                                    ->label(__('sapb1-filament::resources.item.fields.quantity_ordered_customers'))
+                                    ->numeric(decimalPlaces: 2),
+
+                                TextEntry::make('QuantityOrderedFromVendors')
+                                    ->label(__('sapb1-filament::resources.item.fields.quantity_ordered_vendors'))
+                                    ->numeric(decimalPlaces: 2),
+
+                                TextEntry::make('DefaultWarehouse')
+                                    ->label(__('sapb1-filament::resources.item.fields.default_warehouse'))
+                                    ->placeholder('-'),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 
