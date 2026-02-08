@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\CardType;
+use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\BusinessPartner\Partner;
@@ -234,6 +235,9 @@ class PartnerResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                UploadAttachmentAction::make()
+                    ->entityEndpoint('BusinessPartners')
+                    ->entityKeyField('CardCode'),
                 Tables\Actions\DeleteAction::make()
                     ->requiresConfirmation(),
             ])

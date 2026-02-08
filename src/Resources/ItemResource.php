@@ -13,6 +13,8 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\ItemType;
+use SapB1\Toolkit\Filament\Actions\CheckStockAction;
+use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Resources\ItemResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Inventory\Item;
@@ -243,6 +245,10 @@ class ItemResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                CheckStockAction::make(),
+                UploadAttachmentAction::make()
+                    ->entityEndpoint('Items')
+                    ->entityKeyField('ItemCode'),
                 Tables\Actions\DeleteAction::make()
                     ->requiresConfirmation(),
             ])

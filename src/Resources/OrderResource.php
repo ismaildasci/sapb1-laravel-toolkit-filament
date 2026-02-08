@@ -15,6 +15,10 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\DocumentStatus;
+use SapB1\Toolkit\Filament\Actions\CopyToDeliveryAction;
+use SapB1\Toolkit\Filament\Actions\CopyToInvoiceAction;
+use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
+use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Order;
@@ -240,6 +244,12 @@ class OrderResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->visible(fn ($record) => $record->DocumentStatus === DocumentStatus::Open ||
                         $record->DocumentStatus === 'bost_Open'),
+                CopyToDeliveryAction::make(),
+                CopyToInvoiceAction::make(),
+                ViewDocumentFlowAction::make(),
+                UploadAttachmentAction::make()
+                    ->entityEndpoint('Orders')
+                    ->entityKeyField('DocEntry'),
                 Tables\Actions\Action::make('close')
                     ->label(__('sapb1-filament::resources.order.actions.close'))
                     ->icon('heroicon-o-check-circle')

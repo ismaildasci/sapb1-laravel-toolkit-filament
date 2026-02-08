@@ -15,6 +15,10 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\DocumentStatus;
+use SapB1\Toolkit\Filament\Actions\CreateCreditNoteAction;
+use SapB1\Toolkit\Filament\Actions\RecordPaymentAction;
+use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
+use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Invoice;
@@ -259,6 +263,12 @@ class InvoiceResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->visible(fn ($record) => $record->DocumentStatus === DocumentStatus::Open ||
                         $record->DocumentStatus === 'bost_Open'),
+                CreateCreditNoteAction::make(),
+                RecordPaymentAction::make(),
+                ViewDocumentFlowAction::make(),
+                UploadAttachmentAction::make()
+                    ->entityEndpoint('Invoices')
+                    ->entityKeyField('DocEntry'),
                 Tables\Actions\Action::make('cancel')
                     ->label(__('sapb1-filament::resources.invoice.actions.cancel'))
                     ->icon('heroicon-o-x-circle')
