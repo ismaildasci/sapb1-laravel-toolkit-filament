@@ -17,8 +17,10 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\ItemType;
+use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\CheckStockAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
+use SapB1\Toolkit\Services\BatchService;
 use SapB1\Toolkit\Filament\Resources\ItemResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Inventory\Item;
@@ -347,6 +349,54 @@ class ItemResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulk_activate')
+                        ->label(__('sapb1-filament::resources.item.actions.bulk_activate'))
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            /** @var BatchService $service */
+                            $service = app(BatchService::class);
+                            $updates = $records->map(fn ($record) => [
+                                'ItemCode' => $record->ItemCode,
+                                'Valid' => 'tYES',
+                            ])->toArray();
+                            $service->updateItems($updates);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.item.notifications.bulk_activate_complete'))
+                                ->body(__('sapb1-filament::resources.item.notifications.bulk_action_count', [
+                                    'count' => count($updates),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
+                    Tables\Actions\BulkAction::make('bulk_deactivate')
+                        ->label(__('sapb1-filament::resources.item.actions.bulk_deactivate'))
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            /** @var BatchService $service */
+                            $service = app(BatchService::class);
+                            $updates = $records->map(fn ($record) => [
+                                'ItemCode' => $record->ItemCode,
+                                'Valid' => 'tNO',
+                            ])->toArray();
+                            $service->updateItems($updates);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.item.notifications.bulk_deactivate_complete'))
+                                ->body(__('sapb1-filament::resources.item.notifications.bulk_action_count', [
+                                    'count' => count($updates),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->requiresConfirmation(),
                 ]),

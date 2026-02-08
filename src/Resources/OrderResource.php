@@ -19,10 +19,12 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\DocumentStatus;
+use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\CopyToDeliveryAction;
 use SapB1\Toolkit\Filament\Actions\CopyToInvoiceAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
+use SapB1\Toolkit\Services\DocumentActionService;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Order;
@@ -380,6 +382,52 @@ class OrderResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulk_close')
+                        ->label(__('sapb1-filament::resources.order.actions.bulk_close'))
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading(__('sapb1-filament::resources.order.actions.bulk_close_confirm_title'))
+                        ->modalDescription(__('sapb1-filament::resources.order.actions.bulk_close_confirm_description'))
+                        ->action(function ($records): void {
+                            /** @var DocumentActionService $service */
+                            $service = app(DocumentActionService::class);
+                            $docEntries = $records->pluck('DocEntry')->toArray();
+                            $result = $service->closeOrders($docEntries);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.order.notifications.bulk_close_complete'))
+                                ->body(__('sapb1-filament::resources.order.notifications.bulk_action_count', [
+                                    'count' => count($docEntries),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
+                    Tables\Actions\BulkAction::make('bulk_cancel')
+                        ->label(__('sapb1-filament::resources.order.actions.bulk_cancel'))
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading(__('sapb1-filament::resources.order.actions.bulk_cancel_confirm_title'))
+                        ->modalDescription(__('sapb1-filament::resources.order.actions.bulk_cancel_confirm_description'))
+                        ->action(function ($records): void {
+                            /** @var DocumentActionService $service */
+                            $service = app(DocumentActionService::class);
+                            $docEntries = $records->pluck('DocEntry')->toArray();
+                            $service->cancelMultiple('Orders', $docEntries);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.order.notifications.bulk_cancel_complete'))
+                                ->body(__('sapb1-filament::resources.order.notifications.bulk_action_count', [
+                                    'count' => count($docEntries),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->requiresConfirmation(),
                 ]),

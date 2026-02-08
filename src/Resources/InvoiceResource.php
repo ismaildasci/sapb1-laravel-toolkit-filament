@@ -19,7 +19,9 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\DocumentStatus;
+use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\CreateCreditNoteAction;
+use SapB1\Toolkit\Services\DocumentActionService;
 use SapB1\Toolkit\Filament\Actions\RecordPaymentAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
@@ -399,6 +401,29 @@ class InvoiceResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulk_cancel')
+                        ->label(__('sapb1-filament::resources.invoice.actions.bulk_cancel'))
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading(__('sapb1-filament::resources.invoice.actions.bulk_cancel_confirm_title'))
+                        ->modalDescription(__('sapb1-filament::resources.invoice.actions.bulk_cancel_confirm_description'))
+                        ->action(function ($records): void {
+                            /** @var DocumentActionService $service */
+                            $service = app(DocumentActionService::class);
+                            $docEntries = $records->pluck('DocEntry')->toArray();
+                            $service->cancelInvoices($docEntries);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.invoice.notifications.bulk_cancel_complete'))
+                                ->body(__('sapb1-filament::resources.invoice.notifications.bulk_action_count', [
+                                    'count' => count($docEntries),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->requiresConfirmation(),
                 ]),

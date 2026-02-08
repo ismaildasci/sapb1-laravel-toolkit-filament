@@ -18,7 +18,9 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\CardType;
+use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
+use SapB1\Toolkit\Services\BatchService;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\BusinessPartner\Partner;
@@ -360,6 +362,54 @@ class PartnerResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulk_activate')
+                        ->label(__('sapb1-filament::resources.partner.actions.bulk_activate'))
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            /** @var BatchService $service */
+                            $service = app(BatchService::class);
+                            $updates = $records->map(fn ($record) => [
+                                'CardCode' => $record->CardCode,
+                                'Valid' => 'tYES',
+                            ])->toArray();
+                            $service->updatePartners($updates);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.partner.notifications.bulk_activate_complete'))
+                                ->body(__('sapb1-filament::resources.partner.notifications.bulk_action_count', [
+                                    'count' => count($updates),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
+                    Tables\Actions\BulkAction::make('bulk_deactivate')
+                        ->label(__('sapb1-filament::resources.partner.actions.bulk_deactivate'))
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            /** @var BatchService $service */
+                            $service = app(BatchService::class);
+                            $updates = $records->map(fn ($record) => [
+                                'CardCode' => $record->CardCode,
+                                'Valid' => 'tNO',
+                            ])->toArray();
+                            $service->updatePartners($updates);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('sapb1-filament::resources.partner.notifications.bulk_deactivate_complete'))
+                                ->body(__('sapb1-filament::resources.partner.notifications.bulk_action_count', [
+                                    'count' => count($updates),
+                                ]))
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->requiresConfirmation(),
                 ]),
