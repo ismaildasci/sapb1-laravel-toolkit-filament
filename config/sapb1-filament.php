@@ -107,7 +107,35 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    |
+    | Configure Filament database notifications for SAP events.
+    |
+    */
+
+    'notifications' => [
+        'enabled' => env('SAPB1_FILAMENT_NOTIFICATIONS', false),
+        'document_events' => env('SAPB1_FILAMENT_NOTIFY_DOCUMENTS', false),
+        'payment_events' => env('SAPB1_FILAMENT_NOTIFY_PAYMENTS', false),
+        'approval_events' => env('SAPB1_FILAMENT_NOTIFY_APPROVALS', false),
+        'recipient_model' => env('SAPB1_FILAMENT_NOTIFY_MODEL', 'App\\Models\\User'),
+        'recipient_role' => env('SAPB1_FILAMENT_NOTIFY_ROLE'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authorization
+    |--------------------------------------------------------------------------
+    |
+    | Configure authorization for the admin panel.
+    |
+    */
+
     'authorization' => [
+        'enabled' => env('SAPB1_FILAMENT_AUTH_ENABLED', false),
         'gate' => env('SAPB1_FILAMENT_AUTH_GATE', 'sapb1-admin'),
         'super_admin_role' => env('SAPB1_FILAMENT_SUPER_ADMIN_ROLE', 'super-admin'),
     ],

@@ -91,11 +91,54 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    */
+
+    'notifications' => [
+        'document' => [
+            'created_title' => 'Document Created',
+            'created_body' => ':entity #:doc_entry was created successfully',
+            'closed_title' => 'Document Closed',
+            'closed_body' => ':entity #:doc_entry has been closed',
+            'cancelled_title' => 'Document Cancelled',
+            'cancelled_body' => ':entity #:doc_entry has been cancelled',
+        ],
+        'payment' => [
+            'received_title' => 'Payment Received',
+            'received_body' => 'Payment of :amount received from :card_code',
+        ],
+        'approval' => [
+            'requested_title' => 'Approval Requested',
+            'requested_body' => ':object_type #:object_entry requires approval',
+            'completed_title' => 'Approval Completed',
+            'completed_body' => ':object_type #:object_entry approval :status',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Resources
     |--------------------------------------------------------------------------
     */
 
     'resources' => [
+        'common' => [
+            'export_csv' => 'Export CSV',
+            'actions' => [
+                'close' => 'Close',
+                'attachment_file' => 'File',
+                'upload_attachment' => 'Upload Attachment',
+                'view_document_flow' => 'Document Flow',
+                'document_flow_title' => 'Document Flow',
+                'no_document_flow' => 'No document flow available',
+            ],
+            'notifications' => [
+                'attachment_uploaded' => 'Attachment uploaded successfully',
+                'attachment_failed' => 'Failed to upload attachment',
+                'flow_failed' => 'Failed to load document flow',
+            ],
+        ],
         'audit_log' => [
             'navigation_label' => 'Audit Logs',
             'model_label' => 'Audit Log',
@@ -122,6 +165,13 @@ return [
                 'event' => 'Event',
                 'from' => 'From',
                 'until' => 'Until',
+            ],
+            'tabs' => [
+                'all' => 'All',
+                'today' => 'Today',
+                'created' => 'Created',
+                'updated' => 'Updated',
+                'deleted' => 'Deleted',
             ],
             'actions' => [
                 'export' => 'Export',
@@ -184,6 +234,12 @@ return [
                 'entity' => 'Entity',
                 'status' => 'Status',
                 'sync_type' => 'Sync Type',
+            ],
+            'tabs' => [
+                'all' => 'All',
+                'running' => 'Running',
+                'failed' => 'Failed',
+                'today' => 'Today',
             ],
         ],
         'tenant' => [
@@ -255,6 +311,35 @@ return [
                 'active' => 'Active',
                 'inactive' => 'Inactive',
             ],
+            'tabs' => [
+                'all' => 'All',
+                'customers' => 'Customers',
+                'suppliers' => 'Suppliers',
+                'leads' => 'Leads',
+                'with_balance' => 'With Balance',
+            ],
+            'infolist' => [
+                'details' => 'Details',
+                'contact' => 'Contact',
+                'finance' => 'Finance',
+                'open_orders_balance' => 'Open Orders Balance',
+                'open_delivery_balance' => 'Open Delivery Balance',
+            ],
+            'actions' => [
+                'bulk_activate' => 'Activate Selected',
+                'bulk_deactivate' => 'Deactivate Selected',
+            ],
+            'widgets' => [
+                'total' => 'Total Partners',
+                'customers' => 'Customers',
+                'suppliers' => 'Suppliers',
+                'outstanding_balance' => 'Outstanding Balance',
+            ],
+            'notifications' => [
+                'bulk_action_count' => ':count partners updated',
+                'bulk_activate_complete' => 'Partners activated successfully',
+                'bulk_deactivate_complete' => 'Partners deactivated successfully',
+            ],
         ],
         'item' => [
             'navigation_label' => 'Items',
@@ -295,6 +380,35 @@ return [
                 'inventory_item' => 'Inventory Item',
                 'has_stock' => 'Has Stock',
             ],
+            'tabs' => [
+                'all' => 'All',
+                'active' => 'Active',
+                'in_stock' => 'In Stock',
+                'out_of_stock' => 'Out of Stock',
+                'sales_items' => 'Sales Items',
+            ],
+            'infolist' => [
+                'details' => 'Details',
+                'stock' => 'Stock',
+            ],
+            'actions' => [
+                'bulk_activate' => 'Activate Selected',
+                'bulk_deactivate' => 'Deactivate Selected',
+                'check_stock' => 'Check Stock',
+                'check_stock_title' => 'Stock Information',
+                'warehouse_breakdown' => 'Warehouse Breakdown',
+            ],
+            'widgets' => [
+                'total_items' => 'Total Items',
+                'active_items' => 'Active Items',
+                'zero_stock' => 'Zero Stock',
+            ],
+            'notifications' => [
+                'bulk_action_count' => ':count items updated',
+                'bulk_activate_complete' => 'Items activated successfully',
+                'bulk_deactivate_complete' => 'Items deactivated successfully',
+                'stock_check_failed' => 'Failed to check stock',
+            ],
         ],
         'order' => [
             'navigation_label' => 'Sales Orders',
@@ -329,6 +443,19 @@ return [
                 'from' => 'From',
                 'until' => 'Until',
             ],
+            'tabs' => [
+                'all' => 'All',
+                'open' => 'Open',
+                'closed' => 'Closed',
+                'this_month' => 'This Month',
+                'overdue' => 'Overdue',
+            ],
+            'infolist' => [
+                'details' => 'Details',
+                'lines' => 'Lines',
+                'item_description' => 'Description',
+                'line_total' => 'Line Total',
+            ],
             'actions' => [
                 'close' => 'Close',
                 'close_confirm_title' => 'Close Order',
@@ -336,6 +463,39 @@ return [
                 'cancel' => 'Cancel',
                 'cancel_confirm_title' => 'Cancel Order',
                 'cancel_confirm_description' => 'Are you sure you want to cancel this order? This action cannot be undone.',
+                'bulk_close' => 'Close Selected',
+                'bulk_close_confirm_title' => 'Close Orders',
+                'bulk_close_confirm_description' => 'Are you sure you want to close the selected orders?',
+                'bulk_cancel' => 'Cancel Selected',
+                'bulk_cancel_confirm_title' => 'Cancel Orders',
+                'bulk_cancel_confirm_description' => 'Are you sure you want to cancel the selected orders?',
+                'copy_to_delivery' => 'Copy to Delivery',
+                'copy_to_delivery_confirm_title' => 'Copy to Delivery',
+                'copy_to_delivery_confirm_description' => 'Create a delivery from this order?',
+                'copy_to_invoice' => 'Copy to Invoice',
+                'copy_to_invoice_confirm_title' => 'Copy to Invoice',
+                'copy_to_invoice_confirm_description' => 'Create an invoice from this order?',
+            ],
+            'widgets' => [
+                'total_this_month' => 'Total This Month',
+                'open_orders' => 'Open Orders',
+                'open_value' => 'Open Value',
+                'avg_value' => 'Average Value',
+                'by_status' => 'Orders by Status',
+                'status_open' => 'Open',
+                'status_closed' => 'Closed',
+                'status_cancelled' => 'Cancelled',
+            ],
+            'notifications' => [
+                'bulk_action_count' => ':count orders updated',
+                'bulk_close_complete' => 'Orders closed successfully',
+                'bulk_cancel_complete' => 'Orders cancelled successfully',
+                'delivery_created' => 'Delivery Created',
+                'delivery_created_body' => 'Delivery #:doc_num created from order',
+                'delivery_failed' => 'Failed to create delivery',
+                'invoice_created' => 'Invoice Created',
+                'invoice_created_body' => 'Invoice #:doc_num created from order',
+                'invoice_failed' => 'Failed to create invoice',
             ],
         ],
         'invoice' => [
@@ -377,10 +537,56 @@ return [
                 'unpaid' => 'Unpaid',
                 'paid' => 'Paid',
             ],
+            'tabs' => [
+                'all' => 'All',
+                'open' => 'Open',
+                'unpaid' => 'Unpaid',
+                'overdue' => 'Overdue',
+                'this_month' => 'This Month',
+            ],
+            'infolist' => [
+                'details' => 'Details',
+                'lines' => 'Lines',
+                'item_description' => 'Description',
+                'line_total' => 'Line Total',
+            ],
             'actions' => [
                 'cancel' => 'Cancel',
                 'cancel_confirm_title' => 'Cancel Invoice',
                 'cancel_confirm_description' => 'Are you sure you want to cancel this invoice? This action cannot be undone.',
+                'bulk_cancel' => 'Cancel Selected',
+                'bulk_cancel_confirm_title' => 'Cancel Invoices',
+                'bulk_cancel_confirm_description' => 'Are you sure you want to cancel the selected invoices?',
+                'create_credit_note' => 'Credit Note',
+                'credit_note_confirm_title' => 'Create Credit Note',
+                'credit_note_confirm_description' => 'Create a credit note for this invoice?',
+                'record_payment' => 'Record Payment',
+                'payment_amount' => 'Amount',
+                'payment_method' => 'Payment Method',
+                'account_code' => 'Account Code',
+                'payment_methods' => [
+                    'cash' => 'Cash',
+                    'check' => 'Check',
+                    'transfer' => 'Bank Transfer',
+                ],
+            ],
+            'widgets' => [
+                'total_this_month' => 'Total This Month',
+                'total_revenue' => 'Total Revenue',
+                'outstanding' => 'Outstanding',
+                'overdue' => 'Overdue',
+                'aging_chart' => 'Aging Chart',
+                'aging_current' => 'Current',
+            ],
+            'notifications' => [
+                'bulk_action_count' => ':count invoices updated',
+                'bulk_cancel_complete' => 'Invoices cancelled successfully',
+                'payment_recorded' => 'Payment Recorded',
+                'payment_recorded_body' => 'Payment of :amount recorded for invoice #:doc_num',
+                'payment_failed' => 'Failed to record payment',
+                'credit_note_created' => 'Credit Note Created',
+                'credit_note_created_body' => 'Credit note created successfully',
+                'credit_note_failed' => 'Failed to create credit note',
             ],
         ],
     ],
