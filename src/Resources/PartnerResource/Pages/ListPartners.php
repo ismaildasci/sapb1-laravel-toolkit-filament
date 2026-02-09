@@ -7,6 +7,7 @@ namespace SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use SapB1\Toolkit\Filament\Exporters\PartnerExporter;
 use SapB1\Toolkit\Filament\Resources\PartnerResource;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Widgets\PartnerStatsWidget;
 
@@ -25,6 +26,10 @@ class ListPartners extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('export')
+                ->label(__('sapb1-filament::resources.common.export_csv'))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->action(fn () => (new PartnerExporter)->export()),
         ];
     }
 

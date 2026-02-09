@@ -16,3 +16,4 @@ parameters:
         - '#has invalid return type Filament\\#'
         - '#Call to function method_exists\(\) with .* will always evaluate to true#'
         - '#Parameter \#1 \$actions of method Filament\\Tables\\Table::actions\(\)#'
+        - '#Access to an undefined property SapB1\\Toolkit\\Models\\SapB1Model::\$#'

@@ -7,6 +7,7 @@ namespace SapB1\Toolkit\Filament\Resources\InvoiceResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use SapB1\Toolkit\Filament\Exporters\InvoiceExporter;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets\AgingChartWidget;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets\InvoiceStatsWidget;
@@ -27,6 +28,10 @@ class ListInvoices extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('export')
+                ->label(__('sapb1-filament::resources.common.export_csv'))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->action(fn () => (new InvoiceExporter)->export()),
         ];
     }
 

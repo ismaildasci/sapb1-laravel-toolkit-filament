@@ -7,6 +7,7 @@ namespace SapB1\Toolkit\Filament\Resources\OrderResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use SapB1\Toolkit\Filament\Exporters\OrderExporter;
 use SapB1\Toolkit\Filament\Resources\OrderResource;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Widgets\OrdersByStatusWidget;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Widgets\OrderStatsWidget;
@@ -27,6 +28,10 @@ class ListOrders extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('export')
+                ->label(__('sapb1-filament::resources.common.export_csv'))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->action(fn () => (new OrderExporter)->export()),
         ];
     }
 
