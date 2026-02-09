@@ -9,6 +9,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\GlobalSearch\GlobalSearchResult;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
@@ -18,6 +19,8 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use SapB1\Toolkit\Enums\DocumentStatus;
 use SapB1\Toolkit\Filament\Actions\CopyToDeliveryAction;
 use SapB1\Toolkit\Filament\Actions\CopyToInvoiceAction;
@@ -63,6 +66,44 @@ class OrderResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         return SapB1FilamentPlugin::get()->isOrderEnabled();
+    }
+
+    /**
+     * @return array<string>
+     */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['DocNum', 'CardCode', 'CardName', 'NumAtCard'];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @phpstan-ignore argument.type */
+        return [
+            __('sapb1-filament::resources.order.fields.card_name') => (string) ($record->CardName ?? ''),
+            __('sapb1-filament::resources.order.fields.doc_date') => (string) ($record->DocDate ?? ''),
+            __('sapb1-filament::resources.order.fields.doc_total') => number_format((float) ($record->DocTotal ?? 0), 2).' TRY',
+        ];
+    }
+
+    public static function getGlobalSearchResults(string $search): Collection
+    {
+        $records = Order::query()
+            ->where('CardName', 'like', "%{$search}%")
+            ->orWhere('DocNum', $search)
+            ->orWhere('CardCode', 'like', "%{$search}%")
+            ->limit(static::getGlobalSearchResultsLimit())
+            ->get();
+
+        return collect($records->all())
+            ->map(fn ($record): GlobalSearchResult => new GlobalSearchResult(
+                title: "#{$record->DocNum} - {$record->CardName}",
+                url: static::getUrl('view', ['record' => $record->getKey()]),
+                details: static::getGlobalSearchResultDetails($record), /** @phpstan-ignore argument.type */
+            ));
     }
 
     public static function form(Schema $schema): Schema

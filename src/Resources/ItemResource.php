@@ -7,6 +7,7 @@ namespace SapB1\Toolkit\Filament\Resources;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\GlobalSearch\GlobalSearchResult;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
@@ -16,6 +17,8 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use SapB1\Toolkit\Enums\ItemType;
 use SapB1\Toolkit\Filament\Actions\CheckStockAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
@@ -59,6 +62,45 @@ class ItemResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         return SapB1FilamentPlugin::get()->isItemEnabled();
+    }
+
+    /**
+     * @return array<string>
+     */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['ItemCode', 'ItemName', 'BarCode'];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @phpstan-ignore property.notFound, argument.type */
+        $itemType = is_object($record->ItemType) ? $record->ItemType->label() : ($record->ItemType ?? '');
+
+        return [
+            __('sapb1-filament::resources.item.fields.item_type') => (string) $itemType,
+            __('sapb1-filament::resources.item.fields.quantity_on_stock') => number_format((float) ($record->QuantityOnStock ?? 0), 2),
+        ];
+    }
+
+    public static function getGlobalSearchResults(string $search): Collection
+    {
+        $records = Item::query()
+            ->where('ItemName', 'like', "%{$search}%")
+            ->orWhere('ItemCode', 'like', "%{$search}%")
+            ->orWhere('BarCode', 'like', "%{$search}%")
+            ->limit(static::getGlobalSearchResultsLimit())
+            ->get();
+
+        return collect($records->all())
+            ->map(fn ($record): GlobalSearchResult => new GlobalSearchResult(
+                title: "{$record->ItemCode} - {$record->ItemName}",
+                url: static::getUrl('view', ['record' => $record->getKey()]),
+                details: static::getGlobalSearchResultDetails($record), /** @phpstan-ignore argument.type */
+            ));
     }
 
     public static function form(Schema $schema): Schema
