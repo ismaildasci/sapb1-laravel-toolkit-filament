@@ -68,11 +68,12 @@ it('has all pages defined', function () {
         ->toHaveKey('edit');
 });
 
-it('has empty relations by default', function () {
+it('has relation managers registered', function () {
     $relations = PartnerResource::getRelations();
 
     expect($relations)->toBeArray()
-        ->toBeEmpty();
+        ->toContain(\SapB1\Toolkit\Filament\Resources\PartnerResource\RelationManagers\OrdersRelationManager::class)
+        ->toContain(\SapB1\Toolkit\Filament\Resources\PartnerResource\RelationManagers\InvoicesRelationManager::class);
 });
 
 it('can be enabled via plugin', function () {

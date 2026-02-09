@@ -68,11 +68,11 @@ it('has all pages defined', function () {
         ->toHaveKey('edit');
 });
 
-it('has empty relations by default', function () {
+it('has document lines relation manager', function () {
     $relations = OrderResource::getRelations();
 
     expect($relations)->toBeArray()
-        ->toBeEmpty();
+        ->toContain(\SapB1\Toolkit\Filament\Resources\Concerns\DocumentLinesRelationManager::class);
 });
 
 it('can be enabled via plugin', function () {

@@ -26,6 +26,7 @@ use SapB1\Toolkit\Filament\Actions\CreateCreditNoteAction;
 use SapB1\Toolkit\Filament\Actions\RecordPaymentAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
+use SapB1\Toolkit\Filament\Resources\Concerns\DocumentLinesRelationManager;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Pages;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
@@ -475,7 +476,9 @@ class InvoiceResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            DocumentLinesRelationManager::class,
+        ];
     }
 
     public static function getWidgets(): array

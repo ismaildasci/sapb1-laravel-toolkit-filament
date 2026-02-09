@@ -122,6 +122,43 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    'relation_managers' => [
+        'document_lines' => [
+            'title' => 'Document Lines',
+            'columns' => [
+                'line_num' => 'Line',
+                'item_code' => 'Item Code',
+                'item_description' => 'Description',
+                'quantity' => 'Quantity',
+                'price' => 'Price',
+                'discount_percent' => 'Discount %',
+                'warehouse_code' => 'Warehouse',
+                'line_total' => 'Line Total',
+            ],
+        ],
+        'orders' => [
+            'title' => 'Orders',
+            'columns' => [
+                'doc_num' => 'Order No',
+                'card_name' => 'Customer Name',
+                'doc_date' => 'Order Date',
+                'doc_total' => 'Total',
+                'status' => 'Status',
+            ],
+        ],
+        'invoices' => [
+            'title' => 'Invoices',
+            'columns' => [
+                'doc_num' => 'Invoice No',
+                'card_name' => 'Customer Name',
+                'doc_date' => 'Invoice Date',
+                'doc_total' => 'Total',
+                'paid_to_date' => 'Paid Amount',
+                'status' => 'Status',
+            ],
+        ],
+    ],
+
     'resources' => [
         'common' => [
             'export_csv' => 'Export CSV',

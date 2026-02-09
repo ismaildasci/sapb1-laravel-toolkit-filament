@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
 use SapB1\Toolkit\Enums\CardType;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
+use SapB1\Toolkit\Filament\Resources\PartnerResource\RelationManagers;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\BusinessPartner\Partner;
@@ -461,7 +462,10 @@ class PartnerResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\OrdersRelationManager::class,
+            RelationManagers\InvoicesRelationManager::class,
+        ];
     }
 
     public static function getWidgets(): array
