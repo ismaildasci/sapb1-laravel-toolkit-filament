@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Actions;
 
 use Exception;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 
 class CreateCreditNoteAction extends Action
 {

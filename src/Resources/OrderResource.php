@@ -10,24 +10,23 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\DocumentStatus;
-use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\CopyToDeliveryAction;
 use SapB1\Toolkit\Filament\Actions\CopyToInvoiceAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
-use SapB1\Toolkit\Services\DocumentActionService;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Order;
+use SapB1\Toolkit\Services\DocumentActionService;
 
 class OrderResource extends Resource
 {
@@ -180,9 +179,9 @@ class OrderResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Tabs::make('order_details')
                     ->tabs([
@@ -190,8 +189,7 @@ class OrderResource extends Resource
                             ->schema([
                                 TextEntry::make('DocNum')
                                     ->label(__('sapb1-filament::resources.order.fields.doc_num'))
-                                    ->weight('bold')
-                                    ->size(TextEntry\TextEntrySize::Large),
+                                    ->weight('bold'),
 
                                 TextEntry::make('CardCode')
                                     ->label(__('sapb1-filament::resources.order.fields.card_code')),
@@ -229,8 +227,7 @@ class OrderResource extends Resource
                                 TextEntry::make('DocTotal')
                                     ->label(__('sapb1-filament::resources.order.fields.doc_total'))
                                     ->money('TRY')
-                                    ->weight('bold')
-                                    ->size(TextEntry\TextEntrySize::Large),
+                                    ->weight('bold'),
 
                                 TextEntry::make('Comments')
                                     ->label(__('sapb1-filament::resources.order.fields.comments'))

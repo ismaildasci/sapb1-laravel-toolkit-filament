@@ -9,21 +9,20 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\CardType;
-use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
-use SapB1\Toolkit\Services\BatchService;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\BusinessPartner\Partner;
+use SapB1\Toolkit\Services\BatchService;
 
 class PartnerResource extends Resource
 {
@@ -173,9 +172,9 @@ class PartnerResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Tabs::make('partner_details')
                     ->tabs([
@@ -184,7 +183,6 @@ class PartnerResource extends Resource
                                 TextEntry::make('CardCode')
                                     ->label(__('sapb1-filament::resources.partner.fields.card_code'))
                                     ->weight('bold')
-                                    ->size(TextEntry\TextEntrySize::Large)
                                     ->copyable(),
 
                                 TextEntry::make('CardName')
@@ -267,7 +265,6 @@ class PartnerResource extends Resource
                                     ->label(__('sapb1-filament::resources.partner.fields.balance'))
                                     ->money('TRY')
                                     ->weight('bold')
-                                    ->size(TextEntry\TextEntrySize::Large)
                                     ->color(fn ($state) => $state > 0 ? 'danger' : 'success'),
 
                                 TextEntry::make('OpenOrdersBalance')

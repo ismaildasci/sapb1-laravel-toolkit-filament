@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Actions;
 
 use Exception;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use SapB1\Toolkit\Services\AttachmentService;
 
 class UploadAttachmentAction extends Action

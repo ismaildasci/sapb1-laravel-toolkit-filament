@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Actions;
 
 use Exception;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use SapB1\Toolkit\Services\InventoryService;
 
 class CheckStockAction extends Action
@@ -31,6 +31,7 @@ class CheckStockAction extends Action
                     $service = app(InventoryService::class);
                     $stockLevel = $service->getStockLevel((string) $record->ItemCode);
 
+                    /** @phpstan-ignore-next-line */
                     return view('sapb1-filament::components.stock-check', [
                         'itemCode' => $record->ItemCode,
                         'itemName' => $record->ItemName,

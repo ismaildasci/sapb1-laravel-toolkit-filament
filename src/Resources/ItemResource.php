@@ -8,22 +8,21 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\ItemType;
-use Filament\Notifications\Notification;
 use SapB1\Toolkit\Filament\Actions\CheckStockAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
-use SapB1\Toolkit\Services\BatchService;
 use SapB1\Toolkit\Filament\Resources\ItemResource\Pages;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Inventory\Item;
+use SapB1\Toolkit\Services\BatchService;
 
 class ItemResource extends Resource
 {
@@ -155,9 +154,9 @@ class ItemResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Tabs::make('item_details')
                     ->tabs([
@@ -166,7 +165,6 @@ class ItemResource extends Resource
                                 TextEntry::make('ItemCode')
                                     ->label(__('sapb1-filament::resources.item.fields.item_code'))
                                     ->weight('bold')
-                                    ->size(TextEntry\TextEntrySize::Large)
                                     ->copyable(),
 
                                 TextEntry::make('ItemName')
@@ -216,14 +214,12 @@ class ItemResource extends Resource
                                 TextEntry::make('QuantityOnStock')
                                     ->label(__('sapb1-filament::resources.item.fields.quantity_on_stock'))
                                     ->numeric(decimalPlaces: 2)
-                                    ->size(TextEntry\TextEntrySize::Large)
                                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
 
                                 TextEntry::make('available_quantity')
                                     ->label(__('sapb1-filament::resources.item.fields.available'))
                                     ->getStateUsing(fn ($record) => max(0, ($record->QuantityOnStock ?? 0) - ($record->QuantityOrderedByCustomers ?? 0)))
                                     ->numeric(decimalPlaces: 2)
-                                    ->size(TextEntry\TextEntrySize::Large)
                                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
 
                                 TextEntry::make('QuantityOrderedByCustomers')

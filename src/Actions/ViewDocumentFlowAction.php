@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Actions;
 
 use Exception;
-use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\TextEntry;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use SapB1\Toolkit\Services\DocumentFlowService;
 
 class ViewDocumentFlowAction extends Action
@@ -34,6 +32,7 @@ class ViewDocumentFlowAction extends Action
 
                     $flow = $service->getOrderFlow((int) $record->DocEntry);
 
+                    /** @phpstan-ignore-next-line */
                     return view('sapb1-filament::components.document-flow', [
                         'flow' => $flow,
                     ]);

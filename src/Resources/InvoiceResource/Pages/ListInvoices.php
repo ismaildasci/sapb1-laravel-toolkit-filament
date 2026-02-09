@@ -35,7 +35,7 @@ class ListInvoices extends ListRecords
                 ->modifyQueryUsing(fn ($query) => $query->where('DocumentStatus', 'bost_Open')),
 
             'unpaid' => Tab::make(__('sapb1-filament::resources.invoice.tabs.unpaid'))
-                ->modifyQueryUsing(fn ($query) => $query->filter("PaidToDate lt DocTotal")),
+                ->modifyQueryUsing(fn ($query) => $query->filter('PaidToDate lt DocTotal')),
 
             'overdue' => Tab::make(__('sapb1-filament::resources.invoice.tabs.overdue'))
                 ->modifyQueryUsing(fn ($query) => $query

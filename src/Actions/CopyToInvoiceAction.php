@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SapB1\Toolkit\Filament\Actions;
 
 use Exception;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use SapB1\Toolkit\Services\DocumentFlowService;
 
 class CopyToInvoiceAction extends Action
@@ -45,7 +45,7 @@ class CopyToInvoiceAction extends Action
                 }
             })
             ->visible(fn ($record) => ($record->DocumentStatus ?? null) === 'bost_Open'
-                || ($record->DocumentStatus?->value ?? null) === 'bost_Open');
+                || ($record->DocumentStatus->value ?? null) === 'bost_Open');
     }
 
     public static function getDefaultName(): ?string
