@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use SapB1\Toolkit\Enums\CardType;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Resources\PartnerResource\Pages;
+use SapB1\Toolkit\Filament\Resources\PartnerResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\BusinessPartner\Partner;
 use SapB1\Toolkit\Services\BatchService;
@@ -417,6 +418,13 @@ class PartnerResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\PartnerStatsWidget::class,
+        ];
     }
 
     public static function getPages(): array

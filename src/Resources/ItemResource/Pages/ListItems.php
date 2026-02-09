@@ -8,10 +8,18 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use SapB1\Toolkit\Filament\Resources\ItemResource;
+use SapB1\Toolkit\Filament\Resources\ItemResource\Widgets\ItemStatsWidget;
 
 class ListItems extends ListRecords
 {
     protected static string $resource = ItemResource::class;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            ItemStatsWidget::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {

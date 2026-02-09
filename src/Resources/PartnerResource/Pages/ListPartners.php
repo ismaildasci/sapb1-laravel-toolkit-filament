@@ -8,10 +8,18 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use SapB1\Toolkit\Filament\Resources\PartnerResource;
+use SapB1\Toolkit\Filament\Resources\PartnerResource\Widgets\PartnerStatsWidget;
 
 class ListPartners extends ListRecords
 {
     protected static string $resource = PartnerResource::class;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PartnerStatsWidget::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {

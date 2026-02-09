@@ -24,6 +24,7 @@ use SapB1\Toolkit\Filament\Actions\RecordPaymentAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource\Pages;
+use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Invoice;
 use SapB1\Toolkit\Services\DocumentActionService;
@@ -432,6 +433,14 @@ class InvoiceResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\InvoiceStatsWidget::class,
+            Widgets\AgingChartWidget::class,
+        ];
     }
 
     public static function getPages(): array

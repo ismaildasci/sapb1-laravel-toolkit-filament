@@ -8,10 +8,20 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use SapB1\Toolkit\Filament\Resources\OrderResource;
+use SapB1\Toolkit\Filament\Resources\OrderResource\Widgets\OrdersByStatusWidget;
+use SapB1\Toolkit\Filament\Resources\OrderResource\Widgets\OrderStatsWidget;
 
 class ListOrders extends ListRecords
 {
     protected static string $resource = OrderResource::class;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderStatsWidget::class,
+            OrdersByStatusWidget::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {

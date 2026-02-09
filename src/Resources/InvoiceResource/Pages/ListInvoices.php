@@ -8,10 +8,20 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use SapB1\Toolkit\Filament\Resources\InvoiceResource;
+use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets\AgingChartWidget;
+use SapB1\Toolkit\Filament\Resources\InvoiceResource\Widgets\InvoiceStatsWidget;
 
 class ListInvoices extends ListRecords
 {
     protected static string $resource = InvoiceResource::class;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            InvoiceStatsWidget::class,
+            AgingChartWidget::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {

@@ -24,6 +24,7 @@ use SapB1\Toolkit\Filament\Actions\CopyToInvoiceAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Actions\ViewDocumentFlowAction;
 use SapB1\Toolkit\Filament\Resources\OrderResource\Pages;
+use SapB1\Toolkit\Filament\Resources\OrderResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Sales\Order;
 use SapB1\Toolkit\Services\DocumentActionService;
@@ -435,6 +436,14 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\OrderStatsWidget::class,
+            Widgets\OrdersByStatusWidget::class,
+        ];
     }
 
     public static function getPages(): array

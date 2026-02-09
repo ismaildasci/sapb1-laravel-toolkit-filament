@@ -20,6 +20,7 @@ use SapB1\Toolkit\Enums\ItemType;
 use SapB1\Toolkit\Filament\Actions\CheckStockAction;
 use SapB1\Toolkit\Filament\Actions\UploadAttachmentAction;
 use SapB1\Toolkit\Filament\Resources\ItemResource\Pages;
+use SapB1\Toolkit\Filament\Resources\ItemResource\Widgets;
 use SapB1\Toolkit\Filament\SapB1FilamentPlugin;
 use SapB1\Toolkit\Models\Inventory\Item;
 use SapB1\Toolkit\Services\BatchService;
@@ -403,6 +404,13 @@ class ItemResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\ItemStatsWidget::class,
+        ];
     }
 
     public static function getPages(): array
